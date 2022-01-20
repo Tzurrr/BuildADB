@@ -64,17 +64,39 @@ public class CCSVDB {
         //writer.close();
     }
 
-    public void updateARow(){
-        System.out.println("by which indentifier do you want to remove a row?");
-        //available: one of the col's variables (like "moshe"), index, place (look at Telegram to see the difference)
-        String a = sc.nextLine();
+    public void updateARow(int num_of_row) throws IOException {
+        int place = 0;
+        System.out.println("by which indentifier do you want to update the row?");
 
+        ///
+        //available: one of the col's variables (like "moshe"), index, place (look at Telegram to see the difference)
+
+        String temp = sc.nextLine();
         int counter = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) == "place".charAt(i)){
+        for (int i = 0; i < temp.length(); i++) {
+            if (temp.charAt(i) == "place".charAt(i)){
                 counter++;
+            }else {
+                System.out.println("no such updating option");
+                return;
             }
         }
+
+        System.out.println("which col do you want to change");
+        //available: one of the col's variables (like "moshe"), index, place (look at Telegram to see the difference)
+        String col_to_change = sc.nextLine();
+        System.out.println("to?");
+        String what_to_change = sc.nextLine();
+
+        reader.updateByPlace(what_to_change, num_of_row, col_to_change);
+        writer.flush();
+    }
+
+    public void deleteLine(int num_of_row) throws IOException {
+        //maybe I can give the user to delete a line by a variable in it.
+        //for example, delete a line where ID = "123"
+        reader.deleteLine(num_of_row, "");
+        writer.flush();
     }
 
     public void deleteTable() throws IOException {
