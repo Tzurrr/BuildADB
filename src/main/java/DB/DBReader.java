@@ -138,17 +138,21 @@ public class DBReader {
 
     public void print() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(this.filename));
-            String line = br.readLine();
-            String[] values = line.split(COMMA_DELIMITER);
-            for (int i = 0; i < values.length; i++) {
-                System.out.println(values[i]+":");
-                while ((line = br.readLine()) != null) {
-                    String[] inner_values = line.split(COMMA_DELIMITER);
-                    System.out.println(inner_values[i]);
-                }
-                br = new BufferedReader(new FileReader(this.filename));
-                br.readLine();
+        String line = br.readLine();
+        String[] values = line.split(COMMA_DELIMITER);
+        for (int i = 0; i < values.length; i++) {
+            System.out.print(values[i] + "\t");
+        }
+
+        while ((line = br.readLine()) != null) {
+            String[] inner_values = line.split(COMMA_DELIMITER);
+            System.out.println();
+            for (int i = 0; i < inner_values.length; i++) {
+                System.out.print(inner_values[i] + "\t" + " ");
             }
+        }
+        //br = new BufferedReader(new FileReader(this.filename));
+        //br.readLine();
     }
 
     public int getRows() throws IOException {
