@@ -123,7 +123,7 @@ public class DBReader {
         writer.flush();
     }
 
-
+    //TODO: try to make this way-of-deletion to delete also the blank line, because its way more efficient than the other way.
     public void deleteLine(int lineNumber, String data) throws IOException {
         if (lineNumber == 0){
             System.out.println("no such line");
@@ -134,6 +134,20 @@ public class DBReader {
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         lines.set(lineNumber, data);
         Files.write(path, lines, StandardCharsets.UTF_8);
+    }
+
+    public void deleteLine(int lineNumber) throws IOException {
+        if (lineNumber == 0){
+            System.out.println("no such line");
+            return;
+        }
+        CSVReader reader2 = new CSVReader(new FileReader(filename));
+        List<String[]> allElements = reader2.readAll();
+        allElements.remove(lineNumber);
+        FileWriter sw = new FileWriter(filename);
+        CSVWriter writer = new CSVWriter(sw);
+        writer.writeAll(allElements);
+        writer.flush();
     }
 
     public void print() throws IOException {
