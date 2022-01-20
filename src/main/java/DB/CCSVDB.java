@@ -1,5 +1,6 @@
 package DB;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,11 +10,13 @@ public class CCSVDB {
     private FileWriter writer;// = new FileWriter("filename.csv", true);
     private DBReader reader;
     private String path;
+    private File file;
 
     public CCSVDB(String dbname) throws IOException {
         this.writer = new FileWriter(dbname+".csv", true);
         this.reader = new DBReader(dbname+".csv");
         this.path = dbname;
+        this.file = new File(dbname+".csv");
     }
 
     public void Initializer() throws IOException {
@@ -72,5 +75,11 @@ public class CCSVDB {
                 counter++;
             }
         }
+    }
+
+    public void deleteTable() throws IOException {
+        writer.flush();
+        writer.close();
+        this.file.delete();
     }
 }
