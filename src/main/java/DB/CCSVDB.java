@@ -104,4 +104,8 @@ public class CCSVDB {
         writer.close();
         this.file.delete();
     }
+
+    public void printTable() throws IOException {
+        this.reader.print();
+    }
 }
