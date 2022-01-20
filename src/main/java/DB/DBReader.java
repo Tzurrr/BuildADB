@@ -1,9 +1,15 @@
 package DB;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBReader {
     private String filename;
@@ -52,17 +58,82 @@ public class DBReader {
         }
     }
 
-    public void updateByPlace() throws IOException {
+    public void updateByPlace(String replace, int row, String col) throws IOException {
+        int place = 0;
+        int counter = 0;
+        if (row == 0){
+            System.out.println("no such line");
+            return;
+        }
+
+        //File inputFile = new File(this.filename);
+        //CSVReader reader = new CSVReader(new FileReader(inputFile), ',');
+        ArrayList<String[]> csvBody = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
             String line;
-            //maybe add an if statement that checks if the number the func gets equals the rows counter and than just delete the
-            //last row
 
             while ((line = br.readLine()) != null) {
+                String[] values = line.split(COMMA_DELIMITER);
+                csvBody.add(values);
             }
-
-
         }
+
+        //finding the place of the user requested col
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
+            String[] line;
+            line = br.readLine().split(COMMA_DELIMITER);
+            for (int i = 0; i < line.length; i++) {
+                for (int j = 0; j < line[i].length(); j++) {
+                    if (col.length() == line[i].length()) {
+                        if (line[i].charAt(j) == col.charAt(j)) {
+                            //place = i;
+                            counter++;
+                        }
+                    }
+                }
+                if(counter == line[i].length()){
+                    place = i;
+                    break;
+                }
+            }
+        }
+
+        if (place == 0){
+            System.out.println("cant change the index");
+            return;
+        }
+        // get CSV row column  and replace with by using row and column
+        System.out.println("place: " + place);
+        System.out.println("replace" + replace);
+        csvBody.get(row)[place] = replace;
+        FileWriter writer = new FileWriter(this.filename);
+        for (int i = 0; i < csvBody.size(); i++) {
+            for (int j = 0; j < csvBody.get(i).length; j++) {
+                writer.append(csvBody.get(i)[j]);
+                writer.append(',');
+            }
+            //if (i < csvBody.size() - 1){
+                writer.append('\n');
+            //}
+        }
+        //writer.append(csvBody.get(csvBody.size()-1)[csvBody.get(csvBody.size()-1).length-1]);
+        // Write to CSV file which is open
+        //CSVWriter writer = new CSVWriter(new FileWriter(filename), ',');
+        //writer.writeAll(csvBody);
+        writer.flush();
+    }
+
+
+    public void deleteLine(int lineNumber, String data) throws IOException {
+        if (lineNumber == 0){
+            System.out.println("no such line");
+            return;
+        }
+
+        Path path = Paths.get(filename);
+        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        lines.set(lineNumber, data);
+        Files.write(path, lines, StandardCharsets.UTF_8);
     }
 
 
