@@ -7,5 +7,9 @@ public class DBMAIN {
         CCSVDB a = new CCSVDB("ggg");
         //a.Initializer();
         a.addARow();
+        //a.addARow();
+        //a.deleteTable();
+        //a.deleteLine(1);
+        //a.updateARow(1);
     }
 }
