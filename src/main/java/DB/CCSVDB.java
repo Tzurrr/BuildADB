@@ -1,5 +1,7 @@
 package DB;
 
+import DB.Variables.Variable;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,30 +11,48 @@ public class CCSVDB {
     private Scanner sc = new Scanner(System.in);
     private FileWriter writer;// = new FileWriter("filename.csv", true);
     private DBReader reader;
-    private String path;
+    private String name;
     private File file;
+    private String path;
+
+    private Variable temp;
 
     public CCSVDB(String dbname) throws IOException {
         this.writer = new FileWriter(dbname+".csv", true);
         this.reader = new DBReader(dbname+".csv");
-        this.path = dbname;
+        this.name = dbname;
         this.file = new File(dbname+".csv");
+        this.path = dbname+".csv";
     }
 
     public void Initializer() throws IOException {
+        writer.append("index");
+        writer.append(',');
+
         System.out.println("how many cols do you want");
         int opts = sc.nextInt();
+        //if (opts == 1){
+        //writer.append(',');
+        //}
 
-        System.out.println("enter the cols names");
-        //writer.append("1");
-        writer.append("index");
-        String a = this.sc.nextLine();
+        System.out.println("enter the col name");
+        String a = this.sc.next();
         this.writer.append(a);
 
-        for (int i = 0; i < opts; i++) {
-            a = this.sc.nextLine();
+        System.out.println("enter the col type");
+        System.out.println("a");
+        String temp_type = this.sc.next();
+        this.temp = new Variable(temp_type, this.name, a);
+
+        for (int i = 0; i < opts-1; i++) {
+            System.out.println("enter the col name");
+            a = this.sc.next();
             this.writer.append(',');
             this.writer.append(a);
+
+            System.out.println("enter the col type");
+            temp_type = sc.next();
+            this.temp = new Variable(temp_type, this.name, a);
         }
         //writer.append('\n');
         writer.flush();
@@ -43,6 +63,9 @@ public class CCSVDB {
         int cols = reader.getColsCounter();
         int rows = reader.getRows();
 
+        //BUG: appends only the last col created
+        this.temp.makeMetadataFiles();
+
         this.writer.append('\n');
         this.writer.append(String.valueOf(rows));
         this.writer.append(',');
@@ -50,13 +73,13 @@ public class CCSVDB {
         //writer.append(String.valueOf(this.reader.getNumofRows()));
         System.out.println("enter values");
 
-        String a = this.sc.nextLine();
+        String a = this.sc.next();
         this.writer.append(a);
 
         //mosif amudot
         for (int i = 0; i < cols-1; i++) {
             this.writer.append(',');
-            a = this.sc.nextLine();
+            a = this.sc.next();
             this.writer.append(a);
         }
         //writer.append('\n');
@@ -95,7 +118,8 @@ public class CCSVDB {
     public void deleteLine(int num_of_row) throws IOException {
         //maybe I can give the user to delete a line by a variable in it.
         //for example, delete a line where ID = "123"
-        reader.deleteLine(num_of_row, "");
+        //reader.deleteLine(num_of_row, "");
+        reader.deleteLine(num_of_row);
         writer.flush();
     }
 
