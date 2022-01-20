@@ -136,6 +136,20 @@ public class DBReader {
         Files.write(path, lines, StandardCharsets.UTF_8);
     }
 
+    public void print() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(this.filename));
+            String line = br.readLine();
+            String[] values = line.split(COMMA_DELIMITER);
+            for (int i = 0; i < values.length; i++) {
+                System.out.println(values[i]+":");
+                while ((line = br.readLine()) != null) {
+                    String[] inner_values = line.split(COMMA_DELIMITER);
+                    System.out.println(inner_values[i]);
+                }
+                br = new BufferedReader(new FileReader(this.filename));
+                br.readLine();
+            }
+    }
 
     public int getRows() throws IOException {
         return rowsCounter();
