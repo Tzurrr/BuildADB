@@ -6,10 +6,11 @@ public class DBMAIN {
     public static void main(String[] args) throws IOException {
         CCSVDB a = new CCSVDB("ggg");
         //a.Initializer();
-        a.addARow();
+        //a.addARow();
         //a.addARow();
         //a.deleteTable();
         //a.deleteLine(1);
         //a.updateARow(1);
+        a.printTable();
     }
 }
